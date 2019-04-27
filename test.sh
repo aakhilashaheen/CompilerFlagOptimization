@@ -1,27 +1,40 @@
 #!/bin/bash -x
 
-flag=$1
+flag="$1"
+EXT1=$RANDOM
+EXT2=$RANDOM
+EXT3=$RANDOM
 
-cd redis-latest
+if [[ -e redis/ ]]; then
+        pushd redis/
+        git checkout 5.0.4
+        popd
+else
+        git clone https://github.com/antirez/redis
+        pushd redis/
+        git checkout 5.0.4
+        popd
+fi
+
+cd redis/src
+
 make distclean
 
 export CC="gcc"
-export OPT=""
+export OPTIMIZATION=""
 unset REDIS_CFLAGS
 unset REDIS_LDFLAGS
-export CFLAGS="$flag"
-export LDFLAGS="$flag"
+export REDIS_CFLAGS="$flag"
+export REDIS_LDFLAGS="$flag"
 make
 
-echo "$flag"
-
-cd src
 ./redis-server &
 
-sleep 1
-
-./redis-benchmark
+./redis-benchmark -n 100000 -t set -r $EXT1 -q --csv >| ../../test.csv
+./redis-benchmark -n 100000 -t set -r $EXT2 -q --csv >> ../../test.csv
+./redis-benchmark -n 100000 -t set -r $EXT3 -q --csv >> ../../test.csv
 
 #kill server process
 pkill redis-server
 
+make distclean
