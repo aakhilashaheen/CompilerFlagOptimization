@@ -38,3 +38,4 @@ make
 pkill redis-server
 
 make distclean
+exit(0)
