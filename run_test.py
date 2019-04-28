@@ -14,7 +14,7 @@ def read_output():
 
 def run(flags):
     try:
-        subprocess.run(['./test.sh'] + flags)
+        subprocess.run(['./test.sh', ' '.join(flags)])
         return read_output()
     except:
         return 0

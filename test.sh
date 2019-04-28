@@ -30,9 +30,9 @@ make
 
 ./redis-server &
 
-./redis-benchmark -n 100000 -t set -r $EXT1 -q --csv >| ../../test.csv
-./redis-benchmark -n 100000 -t set -r $EXT2 -q --csv >> ../../test.csv
-./redis-benchmark -n 100000 -t set -r $EXT3 -q --csv >> ../../test.csv
+./redis-benchmark -n 10000000 -t set -r $EXT1 -q --csv >| ../../test.csv
+./redis-benchmark -n 10000000 -t set -r $EXT2 -q --csv >> ../../test.csv
+./redis-benchmark -n 10000000 -t set -r $EXT3 -q --csv >> ../../test.csv
 
 #kill server process
 pkill redis-server
