@@ -48,6 +48,8 @@ def run(flags):
 
 def model(x):
     flags = []
+    if x.shape[0] == 1:
+        x = x.reshape(x.shape[1])
     for i in range(len(x)):
         if int(x[i]) != 0:
             flags.append(FLAGS[i])
@@ -56,8 +58,8 @@ def model(x):
 # Save inputs in dictionary
 inputs = {}
 inputs['n_vars']     = 10
-inputs['evalBudget'] = 50
-inputs['n_init']     = 5
+inputs['evalBudget'] = 5
+inputs['n_init']     = 1
 inputs['lambda']     = 1e-4
 
 # Save objective function and regularization term
@@ -80,7 +82,7 @@ inputs['y_vals'] = np.asarray(y_vals)
 
 # Compute optimal value found by BOCS
 iter_t = np.arange(BOCS_SA_obj.size)
-BOCS_SA_opt  = np.minimum.accumulate(BOCS_SA_obj)
+BOCS_SA_opt = np.minimum.accumulate(BOCS_SA_obj)
 # BOCS_SDP_opt = np.minimum.accumulate(BOCS_SDP_obj) 
 
 
@@ -101,7 +103,7 @@ ax  = fig.add_subplot(1,1,1)
 ax.plot(iter_t, np.abs(BOCS_SA_opt), color='r', label='BOCS-SA')
 ax.set_yscale('log')
 ax.set_xlabel('$t$')
-ax.set_ylabel('Best $\log$ difference of write speed')
+ax.set_ylabel('Best $\log$ write speed')
 ax.legend()
 fig.savefig('BOCS_simpleregret.pdf')
 plt.close(fig)
